@@ -1,6 +1,9 @@
 # The csvserver assignment
 
+The developer team of the csvserver was working hard to get it ready for production. The team decided to go for a trip before the launch, and has been missing since then. You have been given the responsibility to figure out how to get the csvserver running correctly with the help of the following document. You might need to understand why things are failing and try to fix them, and make it ready for a launch<sup>[1](#user-content-ftn1)</sup>.
+
 ## Prerequisites
+You don't need to know Docker or Prometheus beforehand to solve this assignment, take a look at the following docs and understand the basics about these tools.
   - Read Docker orientation and setup: https://docs.docker.com/get-started/
   - Read Docker build and run your image: https://docs.docker.com/get-started/part2/
   - Read Get started with Docker Compose: https://docs.docker.com/compose/gettingstarted/
@@ -12,14 +15,20 @@
     docker pull prom/prometheus:v2.22.0
     ```
   - Clone this repository to your machine. (**Don't fork it**).
-  - Create a new private repository on GitHub.
+    - `git clone --single-branch --branch update-assignment https://github.com/infracloudio/csvserver.git`
+  - Use `bash` shell for all the operations, other shells like ksh, fish etc might cause unknown issues.
+  - Create a new **private** repository on GitHub.
   - `cd` into the `solution` directory, and perform all the steps from that directory.
 
 > **NOTE**: If you have a Windows machine, you can try to do this assignment on [WSL-2](https://docs.docker.com/docker-for-windows/wsl/) or use https://labs.play-with-docker.com or install GNU/Linux (i.e. Ubuntu) in a virtual machine.
 
-> **NOTE**: Any step from the assignment do **not** require you to modify the container image / build your own container image at all.
-
-> **REMEMBER**: Make sure all the files you create have the exact names as given.
+### Please note
+  - Any step from the assignment does **not** require you to modify the container image, or build your own container image at all.
+  - Make sure all the files you create have the exact same names as given.
+  - Don't commit all of your work as a single commit, commit it as you finish each part, so we can see the work as you built it up.
+  - The solution should work on a different machine, which has `docker` and `docker-compose`, without any modifications.
+  - Reading this document carefully is the key to solve this assignment.
+  - If you need more time or are stuck at some point, don't hesitate to reach out to us.
 
 ## Part I
   1. Run the container image `infracloudio/csvserver:latest` in background and check if it's running.
@@ -28,18 +37,17 @@
      ```csv
      0, 234
      1, 98
+     2, 34
      ```
      These are comma separated values with index and a random number.
-     - Running the script without any arguments, should generate the file `inputFile` with 10 such entries in current directory.
-     - *You should be able to extend this script to generate any number of entries, for example 100000 entries.*
-     - Run the script to generate the `inputFile`. Make sure that the generated file is readable by other users.
-  4. Run the container again in the background with file from (3) available inside the container (remember the reason you found in (2)).
+     - Running the script with two arguments as `./gencsv.sh 2 8`, should generate the file `inputFile` with 7 such entries in current directory. Where the index of first entry is `2` and the last entry is `8`.
+  4. Run the container again in the background with file generated in (3) available inside the container (remember the reason you found in (2)).
   5. Get shell access to the container and find the port on which the application is listening. Once done, stop / delete the running container.
   6. Same as (4), run the container and make sure,
      - The application is accessible on the host at http://localhost:9393
      - Set the environment variable `CSVSERVER_BORDER` to have value `Orange`.
 
-The application should be accessible at http://localhost:9393, it should have the 10 entries from `inuptFile` and the welcome note should have an orange color border.
+The application should be accessible at http://localhost:9393, it should have the 7 entries from `inputFile` and the welcome note should have an orange color border.
 
 > **NOTE**: If you are using play-with-docker.com then you will see the number 9393 highlighted at the top. You can access the application by clicking on that instead of using http://localhost:9393
 
@@ -66,7 +74,8 @@ The application should be accessible at http://localhost:9393, it should have th
 ## Part II
   0. Delete any containers running from the last part.
   1. Create a `docker-compose.yaml` file for the setup from part I.
-  2. One should be able to run the application with `docker-compose up`.
+  2. Use an environment variable file named `csvserver.env` in `docker-compose.yaml` to pass environment variables used in part I.
+  3. One should be able to run the application with `docker-compose up`.
 
 ### Save the solution
   - Copy the `docker-compose.yaml` to the `solution` directory.
@@ -96,5 +105,9 @@ The Prometheus instance should be accessible at http://localhost:9090, and it sh
 ## Submitting the solution
 Once you have pushed your progress,
 
-- Add `anju-infracloud` and `rahul-infracloud` as collaborators to the repository.
+- Add `anju-infracloud` as collaborators to the repository.
 - Reply to the email with link to your repository / send an email to `anju [at] infracloud [dot] io`.
+
+---
+
+<a name="ftn1">1</a>: This scenario is inspired by the *[Tying This Together: Reverse Engineering a Production Service](https://sre.google/sre-book/accelerating-sre-on-call/#tying-this-together-reverse-engineering-a-production-service-ZKsDiLce)* section of chapter 28 from the Site Reliability Engineering book by Google.

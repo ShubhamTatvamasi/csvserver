@@ -1,6 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-for i in `seq 0 $[${1:-10} - 1]`
-do
-  echo "${i}, ${RANDOM}" >> inputFile
+START=${1}
+END=${2}
+
+while [ "${START}" -le "${END}" ]; do
+  echo "${START}, ${RANDOM}" >> inputFile
+  ((START++))
 done
