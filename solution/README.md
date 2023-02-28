@@ -29,7 +29,7 @@ docker logs csvserver
 cd solution
 
 # run the following script to generate inputFile
-./gencsv.sh
+./gencsv.sh 2 8
 ```
 
 4. Run the container again in the background with file from (3) available inside the container (remember the reason you found in (2)).
